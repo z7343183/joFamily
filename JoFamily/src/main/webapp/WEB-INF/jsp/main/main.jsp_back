@@ -1,0 +1,1010 @@
+<%@ page contentType="text/html; charset=utf-8" pageEncoding="utf-8"%>
+<%@ taglib prefix="c"      uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form"   uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="ui"     uri="http://egovframework.gov/ctl/ui"%>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<%@taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="ko" xml:lang="ko">
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>My Home</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <link href="css/docs.min.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="<%=request.getContextPath()%>/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,700" rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Kaushan+Script' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Droid+Serif:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Roboto+Slab:400,100,300,700' rel='stylesheet' type='text/css'>
+
+    <!-- Theme CSS -->
+    <link href="<%=request.getContextPath()%>/css/agency.min.css" rel="stylesheet">
+    
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>-->
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js" integrity="sha384-0s5Pv64cNZJieYFkXYOTId2HMA2Lfb6q2nAcx2n0RTLUnCAoTTsS0nKEO27XyKcY" crossorigin="anonymous"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js" integrity="sha384-ZoaMbDF+4LeFxg6WdScQ9nnR1QC2MIRxA1O9KWEXQwns1G8UNyIEZIQidzb0T1fo" crossorigin="anonymous"></script>
+    <!--[endif]-->
+        
+</style>
+
+</head>
+
+<body id="page-top" class="index"  ng-app="myApp">
+
+    <!-- Navigation -->
+    <nav id="mainNav" class="navbar navbar-default navbar-custom navbar-fixed-top">
+        <div class="container">
+            <!-- Brand and toggle get grouped for better mobile display -->
+            <div class="navbar-header page-scroll">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span> Menu <i class="fa fa-bars"></i>
+                </button>
+                <a class="navbar-brand page-scroll" href="#page-top">My Home</a>
+            </div>
+
+            <!-- Collect the nav links, forms, and other content for toggling -->
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="hidden">
+                        <a href="#page-top"></a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#services">Services</a>
+                    </li>
+                    <li>
+                        <a class="page-scroll" href="#portfolio">Gallery</a>
+                    </li>
+                    <li>
+                        <a href="#uploadPhoto" class="portfolio-link" data-toggle="modal" >Upload</a>
+                    </li>
+                    <li>
+                        <a href="#setup"  class="portfolio-link" data-toggle="modal" data-view-pre ="selSetupInfo" data-view-pre-param ="">Setup</a>
+                    </li>                                         
+                    <li>
+                        <a class="page-scroll" href="<%=request.getContextPath()%>/logout.do">Logout</a>
+                    </li>                    
+                </ul>
+            </div>
+            <!-- /.navbar-collapse -->
+        </div>
+        <!-- /.container-fluid -->
+    </nav>
+
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="intro-text">
+                <div class="intro-lead-in">Welcome To My Home!</div>
+                <div class="intro-heading">It's Nice To Meet You</div>
+                <a href="#portfolio" class="page-scroll btn btn-xl">Go To GALLAY</a>
+            </div>
+        </div>
+    </header>
+    <!-- Services Section -->
+    <section id="services">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Services & Setup</h2>
+                    <h3 class="section-subheading text-muted">&nbsp;</h3>
+                </div>
+            </div>
+            <div class="row text-center">
+              	<div class="col-md-4">
+                    <span class="fa-stack fa-4x" >
+						<img  ng-src="<%=request.getContextPath()%>/images/jo/photo2.png" class="img-responsive" alt="">                        
+                    </span>
+                    <h4 class="service-heading">Gallery</h4>
+                    <a type="button" class="btn btn btn-danger page-scroll" id="syncPhoto" href="#portfolio">동기화</a>
+                    <p>&nbsp;</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                       <img  ng-src="<%=request.getContextPath()%>/images/jo/video.png" class="img-responsive" alt="">                        
+                    </span>
+                    <h4 class="service-heading">New Video</h4>
+                    <a type="button" class="btn btn btn-danger" href="http://jj0315.ipdisk.co.kr:2080" target="_blank">바로가기</a>
+                    <p>&nbsp;</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <img  ng-src="<%=request.getContextPath()%>/images/jo/music2.png" class="img-responsive" alt="">                                                
+                    </span>
+                    <h4 class="service-heading">New Music</h4>
+                    <a type="button" class="btn btn btn-danger" href="http://jj0315.ipdisk.co.kr:4040" target="_blank">바로가기</a>
+                    <p>&nbsp;</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <img  ng-src="<%=request.getContextPath()%>/images/jo/setup2.png" class="img-responsive" alt="">                                                
+                    </span>
+                    <h4 class="service-heading">Setup</h4>
+                    <a href="#setup"  class="btn btn btn-danger portfolio-link" data-toggle="modal" data-view-pre ="selSetupInfo" data-view-pre-param ="">설정</a>
+                    <p>&nbsp;</p>
+                </div>
+                <div class="col-md-4">
+                    <span class="fa-stack fa-4x">
+                        <img  ng-src="<%=request.getContextPath()%>/images/jo/upload2.png" class="img-responsive" alt="">                                                
+                    </span>
+                    <h4 class="service-heading">Upload</h4>
+                    <a href="#uploadPhoto"  class="btn btn btn-danger portfolio-link" data-toggle="modal" data-view-pre ="selSetupInfo" data-view-pre-param ="">업로드</a>
+                    <p>&nbsp;</p>
+                </div>
+                
+            </div>
+        </div>
+    </section>
+
+    <!-- Portfolio Grid Section -->
+    <section id="portfolio" class="bg-light-gray">
+        <div class="container" id="picCon"  ng-controller="dirCtrl">
+            <div class="row" id="picTxt">
+                <div class="col-lg-12 text-center">
+                    <h2 class="section-heading">Gallery</h2>
+                    <h3 class="section-subheading text-muted">Who controls the past controls the future. </h3>
+                </div>
+            </div>
+            <div class="row" id ="picRow" >
+                <div class="col-md-4 col-sm-6 portfolio-item"  ng-repeat="data in data" >
+                    <a href="#portfolioModal1" class="portfolio-link" data-toggle="modal" data-view-pre ="fnPicList" data-view-pre-param ="{{data.DIR}}" >
+                        <div class="portfolio-hover">
+                            <div class="portfolio-hover-content">
+                                <i class="fa fa-plus fa-3x"></i>
+                            </div>
+                        </div>                        
+                         <img onerror="setErrImg(this)"  ng-src="<%=request.getContextPath()%>/images/jo/myPic/thumbnail/{{data.THIS_PATH}}.jpg?{{data.RANDOM}}"  class="img-responsive picDir-Img" alt="">                        
+		            </a>
+                    <div class="portfolio-caption"  href="#portfolioModal1"  data-toggle="modal" data-view-pre ="fnPicList" data-view-pre-param ="{{data.DIR}}" style="cursor: pointer;" >
+                        <h4 class="picDir-h4">{{data.THIS_STR.substring(0,20)}}</h4>	                 	
+                        <p class="picDir-text text-muted">{{data.THIS_DATE.substring(0,4) +"."+ data.THIS_DATE.substring(4,6) +"."+data.THIS_DATE.substring(6,8)}}</p>
+                    </div>
+                </div>                      
+            </div>
+            <p align="center"><button id="nextView1"  type="button" class="btn btn-lg btn-primary nextView1" ng-click="addRow()">계속보기</button></p>                   
+        </div>
+    </section>
+    <footer>
+        <div class="container">
+            <div class="row">
+                <div class="col-md-4">
+                    <span class="copyright">Copyright &copy; Your Website 2017</span>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline social-buttons">
+                        <li><a href="#"><i class="fa fa-twitter"></i></a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-facebook"></i></a>
+                        </li>
+                        <li><a href="#"><i class="fa fa-linkedin"></i></a>
+                        </li>
+                    </ul>
+                </div>
+                <div class="col-md-4">
+                    <ul class="list-inline quicklinks">
+                        <li><a href="#">Privacy Policy</a>
+                        </li>
+                        <li><a href="#">Terms of Use</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- Portfolio Modals -->
+    <!-- Use the modals below to showcase details about your portfolio projects! -->
+
+    <!-- Portfolio Modal 1 -->
+    <div class="portfolio-modal modal fade" id="portfolioModal1" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="close-modal picClose" data-dismiss="modal">
+                    <div class="lr">
+                        <div class="rl">
+                        </div>
+                    </div>
+                </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <div class="modal-body">
+                                <!-- Project Details Go Here -->
+                                <h2>&nbsp;</h2>
+                                <div id="picBtn">                                
+                                </div>
+                                <p class="item-intro text-muted">Who controls the past controls the future.</p>                                
+                                <div id = "picHref">
+                                </div>
+                                <div id = "picList">
+                                
+                                </div>
+                                <button id="nextView2"  type="button" class="btn btn-lg btn-info nextView2" style="display: none;">계속보기</button>
+                                <button id="picInfoClose" type="button" class="btn btn-lg btn-primary picClose" data-dismiss="modal"><i class="fa fa-times"></i> Close </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Portfolio Modal 1 -->
+    <div class="portfolio-modal modal fade" id="setup" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color: #EAEAEA">
+               <div class="close-modal" id="setupClose" data-dismiss="modal">
+                    <div class="lr">
+                        <div class="rl">
+                        </div>
+                    </div>
+                </div>
+                <div class="container"  >
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <div class="modal-body" >
+                            	<div id="setupBody">
+                                 <div class = "setupBox" >
+                                   	<div>Gallery 로그인시  자동  동기화</div>
+                                   	<div class="setupContent">	                                                   		                        		  
+	                                 	<p class="set1">
+										    <input type="radio" name="SET1"  value="1"   autocomplete="off"> 켜짐(오래걸림)
+										    <input type="radio" name="SET1"  value="2"    autocomplete="off">꺼짐
+										</p>
+                                	</div>
+                                </div>  
+                                <div class = "setupBox" >
+                                   	<div >Gallery 썸네일 표시</div>
+                                   	<div class="setupContent">	                                        		  
+	                                   <p class="set2"><input name="SET2" type="radio"  value="1" />표시<input name="SET2" type="radio"  value="2" />표시안함	                                   				 
+	                                   </p>
+                                	</div>
+                                  </div>          
+                                 <div class = "setupBox" >
+                                   	<div >Gallery 한번에 표시할 사진 갯수 </div>
+                                   	<div class="setupContent">	                                        		  
+	                                   <p class="set3"><input name="SET3" type="radio"  value="all" />전체<input name="SET3" type="radio"  value="15"/>15개 <input type="radio"  name="SET3" value="30" />30개 
+	                                   				  <input type="radio"  name="SET3" value="60"/>60개</p>
+	                                   </p>
+                                	</div>
+                                  </div>                                  
+                                  <div class = "setupBox" >
+                                   	<div >사진상세에서 한번에 표시할 사진 갯수</div>
+                                   	 <div class="setupContent">	                                        		  
+	                                   <p class="set4"><input name="SET4" type="radio" value="all" />전체<input name="SET4" type="radio" value="15"/>15개<input type="radio"  name="SET4" value="30" /> 30개
+	                                   				   <input type="radio"  name="SET4" value="60"/>60개</p>	
+	                                   </p> 	                                                                      
+                                	</div>
+                                  </div> 
+                                   <div class = "setupBox" >
+                                   	<div>사진 다운로드(1초클릭) 기능</div>
+                                   	 <div class="setupContent">	                                        		  
+	                                   <p class="set5"><input name="SET5" type="radio" value="1" />사용
+	                                   <input name="SET5" type="radio" value="2"/>사용안함(폰 자체기능사용)</p> 	                                                                      
+                                	</div>
+                                  </div>                                  
+                                </div>   
+                                 <div class = "setupBox" id="authSetup" style="display: none">
+                                   	<div>사진폴더 권한 관리</div>
+                                   	 <div class="setupContent scroll">
+                                   	 <div style="height:400px;overflow-x:auto;">
+								          <table class="table table-striped">
+								            <tbody id ="authRow">
+								              <tr>
+								                <td class="auth_dir" ></td>
+								                <td class="auth_check" ></td>
+								              </tr>								              
+								            </tbody>
+								          </table>
+								        </div>	                                        		  
+                                	</div>
+                                  </div>                                  	
+                                <br/><br/>                                
+                                <button type="button" id="setupReload" class="btn btn-info" data-dismiss="modal">적용(재시작)</button>
+                                <button type="button" class="btn btn-danger" data-dismiss="modal"><i class="fa fa-times"></i>CLOSE</button>
+                        	</div>
+                    	</div>
+            		</div>
+        		</div>
+   			</div>
+    	</div>
+    </div>
+     <!-- Portfolio Modal 2 -->
+    <div class="portfolio-modal modal fade" id="uploadPhoto" tabindex="-1" role="dialog" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content" style="background-color: #EAEAEA">
+               <div class="close-modal" data-dismiss="modal" id="upClose">
+                    <div class="lr">
+                        <div class="rl">
+                        </div>
+                    </div>
+                </div>
+                <div class="container"  >
+                    <div class="row">
+                        <div class="col-lg-8 col-lg-offset-2">
+                            <div class="modal-body" id="upBody" >                                
+                                  <div class = "setupBox" >                                  
+                                   	<div >경로 선택</div>
+                                   	 <div class="setupContent bd-example">	 
+                                   	 <form id="fileForm" enctype="multipart/form-data">
+	                                   <div class="form-group ">
+  										<div class="col-10">
+  										<div>
+    										<input class="form-control" type="text" value="" id="fileDate" name = "fileDate">
+    										<button id="upLoadBtn" type="button" class="btn btn-warning" >기존에 추가</button>
+    									</div>
+    									<label class="txtGuide" id="fileDateGuide" >일자  : ex) 20170527</label>
+    									
+  										</div>
+  										<br/>
+  										<div class="col-10">  										
+    									<input class="form-control" type="text" value="" id="fileTxt" name = "fileTxt">
+    									<label class="txtGuide" id="fileTxtGuide">경로  : ex) 부산/해운대 </label>
+  										</div> 	  
+										<div style="display: none"> 	                                   	                                   		                                   
+	                                   	<input id="uploadFile" type="file" style="width: 500px" multiple="multiple" name="filename[]"/>사진올리기 	                                   
+	                                   	</div>
+	                                   	<br>
+	                                   	</br>	   
+	                                   	<div align="center">
+	                                   		<span id="uploadBtnSpan">
+		                                		<button id="upLoadBtn" type="button" class="btn btn-warning" 	>UPLOAD</button>
+		                                	</span>
+        		                        	<button id="uploadBtnClose" type="button" class="btn btn-info" data-dismiss="modal"><i class="fa fa-times"></i>CLOSE</button>                                	
+	                                   </div>
+	                                   </div>
+	                                   </form>
+	                                </div> 	        	                                                                                                      	
+                                  </div>                                
+                        	</div>
+                    	</div>
+            		</div>
+        		</div>
+   			</div>
+    	</div>
+    </div>
+    <div id="alertMsgDiv" align="center" class="alertDiv" style="display: none; cursor: pointer;">
+		<div class="container">		
+			 <div class="alert alert-danger alert-dismissible fade in" style="max-width: 700px" role="alert">
+			  <button id="alertBtnClose" type="button" class="close" >
+			  <span>×</span>
+			  <span class="sr-only">Close</span></button>
+			   <strong style="margin-right: 10px">알림말!</strong>
+			   <span id="alertMsg"></span> 
+			  </div> 
+		</div>
+	</div>		
+	<div id="layerpop"  class="laypopDiv" style="display: none;position: absolute;z-index:7500"  curX = "" curY = "">
+	  <div class="modal-dialog modal-sm">
+	    <div class="modal-content">
+	      <div class="modal-header" style="padding: 10px">
+	      	<strong id="fileName"></strong>	
+	        <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      <div class="modal-body" >
+				<a id="down1" style="color: black;"><p>원본(고용량) 다운로드</p></a>
+				<a id="down2" style="color: black;"><p>저용량 다운로드</p></a>
+				<a id="chgPic" style="color: black;"><p>이사진으로 썸네일 변경</p></a>
+	      </div>	      
+	    </div>
+	  </div>
+	</div>
+	
+	<div id="dirPathPop"  class="dirPath" style="display: none;position: absolute;z-index:7600"  curX = "" curY = "">
+	  <div class="modal-dialog modal-sm">
+	    <div class="modal-content">
+	      <div class="modal-header" style="padding: 10px">
+	      <button type="button" class="close" data-dismiss="modal">×</button>
+	      </div>
+	      <div class="modal-body" >
+			 <div class="setupContent scroll">
+	               <div style="height:400px;overflow-x:auto;">
+			          <table class="table table-striped">
+			         <tbody id ="upDirRow">
+			              <tr>
+			                <td class="upDir_dir" ></td>			                
+			              </tr>								              
+			            </tbody>
+			          </table>
+			       </div>	                                        		  
+              </div>
+	      </div>	      
+	    </div>
+	  </div>
+	</div>
+	
+    <!-- jQuery -->
+    <script src="vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="<%=request.getContextPath()%>/vendor/bootstrap/js/bootstrap.js"></script>
+
+    <!-- Plugin JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-easing/1.3/jquery.easing.min.js" integrity="sha384-mE6eXfrb8jxl0rzJDBRanYqgBxtJ6Unn4/1F7q4xRRyIw7Vdg9jP4ycT7x1iVsgb" crossorigin="anonymous"></script>
+
+    <!-- Contact Form JavaScript -->
+    <script src="<%=request.getContextPath()%>/js/jqBootstrapValidation.js"></script>
+    <script src="<%=request.getContextPath()%>/js/contact_me.js"></script>
+
+    <!-- Theme JavaScript -->
+    <script src="<%=request.getContextPath()%>/js/agency.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="css/showLoading.css" charset="UTF-8" />
+    <link rel="stylesheet" type="text/css" href="css/angularAni.css" charset="UTF-8" />
+   
+	<script language="javascript" src="<%=request.getContextPath()%>/js/jquery.showLoading.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.min.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.8/angular-animate.js"></script>
+	<script src="<%=request.getContextPath()%>/js/common.js"></script>
+ 	<script type="text/javascript">
+ 	
+ 	var rpath="<%=request.getContextPath()%>";
+ 	var setting = ${user.SETT};
+ 	var userSet = eval(setting);
+ 	
+ 	
+ 	function alertPop(str, str2){
+ 		var displayYn;
+ 		if(str2 == undefined ){
+ 			displayYn = "Y";	
+ 		}else{	 			
+ 			displayYn = str2;
+ 		}
+ 		 		
+ 		$('#alertMsg').text(str);
+ 		$('#alertMsgDiv').show();
+ 		$('#alertMsgDiv').css({"top" : "0px"});
+ 		$('#alertMsgDiv').animate({"top" : '200px' }, "600");
+ 		setTimeout(function(){	 			
+ 			if(displayYn=='Y') {
+ 				$('#alertMsgDiv').fadeOut(500);	
+ 			}
+ 				 			
+ 		}, 1000);
+ 	}
+	
+ 	$(document).ready(function(){
+ 		
+ 		if(userSet.SET1 == '1'){
+ 			$('#syncPhoto').trigger('click'); //자동동기화 
+ 		}
+ 		 
+ 		$(document).on('click focus touchmove tourchstart  ', function(e){
+ 			
+ 			if($('#layerpop').is(':visible')){
+	 			
+	 			var curX = $('#layerpop').attr('curX');
+	 			var curY = $('#layerpop').attr('curY');
+	 			var x = e.pageX;
+	            var y = e.pageY;
+	            if(x == undefined &&e.type.indexOf("touch") ){
+	            	var et = e.originalEvent;						            	
+	            	x = et.touches[0].screenX;						            	
+	            	y = et.touches[0].screenY;
+	            }		
+	 			
+	 			if(curX != x && curY != y ){
+	 				$('#layerpop').attr({'curX':'', 'curY':''});
+	 				$('#layerpop').hide(); 				
+	 			}
+ 			
+ 			}
+ 		})
+ 		
+ 		if(userSet.SET3 != 'all')
+ 		$('#nextView1').show();
+ 		
+ 		if(userSet.SET4 != 'all'){
+ 	 	 	$('#nextView2').show();
+ 		}
+		$('#alertMsgDiv').on('click', function(){
+				$('#alertMsgDiv').hide();
+		});
+ 		
+		
+		if(userSet.SET5 == '1'){ //자체 다운로드 방지
+			$//(document).bind("contextmenu", function(e) { return false;	});
+			//$(document).bind('selectstart',function() {return false;});  
+			//$(document).bind('dragstart',function(){return false;});  	
+		}
+		
+ 		
+ 		$('#fileDate, #fileTxt').on('focus blur', function(e){ 			
+ 			if(e.type=="focus"){ 				
+ 				$('#'+this.id+"Guide").hide(); 				
+ 			}else if(e.type=="blur"){
+ 				if(this.value == ""){
+ 					$('#'+this.id+"Guide").show();	 					
+ 				}
+ 			} 			
+ 		});
+ 		
+ 		$('#fileDateGuide, #fileTxtGuide').on('focus click', function(e){
+ 			var id = (this.id).replace("Guide","");
+ 			$('#'+id).trigger("focus");
+ 		});
+ 		
+ 		$('#upClose, #uploadBtnClose').on("click",function(){
+ 			var o =$('#uploadFile').clone().hide();
+ 			$('#uploadFile').remove();
+ 			$('#uploadBtnSpan').append(o);
+ 			uploadFileChange(); 			
+ 			btnInit();
+ 		});
+ 		
+ 		$('.picClose').on("click", function(){
+ 			$('.videoMargin').each(function(){
+ 				this.pause();
+ 			})
+ 		});
+
+ 		$('#upLoadBtn').on('click', function(){
+	 		$('#uploadFile').trigger("click");
+	 		
+	 	});
+ 		$('#setupClose').on('click', function(){ 			
+ 			if(confirm("적용하시겠습니까?")){ 				
+ 				location.href = rpath+"/";
+ 			}
+ 			
+ 		});
+	 	$('#setupReload').on('click', function(){
+	 		location.href = rpath+"/";	 	
+	 	});
+	 	
+		$('#setupBody').find(':radio').on('change', function(){					
+			var val = $(this).val(); 
+			var name = $(this).attr('name');
+ 				$.ajax({
+ 		 			type        : "POST",
+ 		 			data : {SET_KEY:name  , VALUE : val },
+ 		 			url :  rpath+"/main/updateSetupInfo.do", 			
+ 		 			success : function(data){ 	 				
+ 		 				authInfo.setData(data.authDir); 				
+ 					},
+ 		 			error : function(request, status, error){ 				
+ 		 				alertPop("오류가 발생하였습니다.");
+ 		 			}
+ 		 		});	 	 
+		});
+	 	
+	 	function btnInit(){
+	 		$('#fileDate, #fileTxt').val('');
+	 		$('#fileTxt').trigger('focus');
+	 		$('#fileDate').trigger('focus');
+			$('#upLoadBtn').text("UPLOAD");
+ 			$('#upLoadBtn').removeClass();
+ 			$('#upLoadBtn').fadeOut('500').addClass("btn btn-warning").fadeIn(500);	 			
+ 			$('#upLoadBtn').off('click');
+ 			$('#upLoadBtn').on('click', function(){
+ 				$('#uploadFile').trigger("click");		 				
+ 			});
+	 		
+	 	}
+	 	
+	 	
+	 	function uploadFileChange(){
+	 		$('#uploadFile').on('change',function(){	 		
+		 		if($(this).val() != ""){	 			
+		 			$('#upLoadBtn').text("SAVE FILE");
+		 			$('#upLoadBtn').removeClass();
+		 			$('#upLoadBtn').fadeOut('500').addClass("btn btn-danger").fadeIn(500);	 	
+		 			$('#upLoadBtn').off('click');
+		 			$('#upLoadBtn').on('click', function(){		 				
+		 				uploadFile();		 				
+		 			});
+		 		}else{
+		 			btnInit();
+	 			}
+	 		});
+	 	}
+	 	
+	 	uploadFileChange();	 	         
+	 	
+	 	
+	 	function uploadFile(){
+	 		if($.trim($('#fileDate').val())==""){ 			
+	 			alertPop("일자를 입력해 주세요.");
+	 			return;
+	 		}else if($.trim($('#fileTxt').val()) ==""){
+	 			alertPop("경로를 입력해 주세요.");
+	 			return;
+	 		}
+	 		
+	 		var formData = new FormData(); 
+			var files = $("#uploadFile").get(0).files; 
+			if (files.length == 0){
+				return;
+			}
+			
+			// Loop through each of the selected files.
+			for (var i = 0; i < files.length; i++) {
+			  var file = files[i];
+
+			  // Check the file type.
+			  if (!file.type.match('image.*')) {
+			    	alertPop("그림파일이 아닙니다. 초기화됩니다.");
+			    	btnInit();
+			    	return;
+			  }
+			  formData.append('photos[]', file, file.name);		  
+			}
+			
+			//경로 셋팅
+			formData.append("path", $.trim($('#fileDate').val())+" "+$.trim($('#fileTxt').val()));
+			
+			var bar = new loadingBar("upBody");
+			bar.start();
+			$.ajax({ url: rpath+"/pic/uploadPic.do", 		
+					type:"POST", 
+					processData: false, 
+					contentType: false, 
+					data: formData , 
+					success: function (response) { //성공시											
+						btnInit();
+						bar.end();
+						alertPop("전송 완료! 사진 동기화를 해주세요.","N");
+					}
+					, error: function (er) {
+						bar.end();
+						alertPop("오류발생","N"); 
+					}
+			}); 					
+	 	}
+ 	
+ 	});
+ 	
+ 	//jquery ajax 사용
+ 	 var fnPicList = function(str){
+ 		var cnt = 0;
+ 		var gData = "";
+ 		if(userSet.SET4 != 'all'){ 	 	 	
+ 	 	 	var cnt = userSet.SET4 ; 	 	 	
+ 	 	 	$('#nextView2').off("click");
+ 	 	 	$('#nextView2').on("click", function(){ 	 	 		
+ 	 	 		clickCnt ++ ; 	 	 		
+				var dat = gData.slice(0,cnt);
+				gData = gData.slice(cnt);
+ 	 	 		setDetailImageData(dat);
+ 	 	 		if($(gData).size()==0) $('#nextView2').hide();
+ 	 	 	});
+ 		}
+ 		
+ 		$('#portfolioModal1 .modal-body').find('h2').text(str); 		
+ 		$('#picList').empty();		
+ 		$('#picBtn').empty();
+ 		$('#picList').show();
+ 		$('#portfolioModal1').show();
+		$('#picList').append('<img class="img-responsive img-centered" src="'+rpath+'/images/jo/loading1.gif" >');
+		$('#picList').append('<p class="item-intro text-muted">동기화중입니다. 잠시만 기다려 주세요.</p>');
+		
+        var reqId = new Date().getTime();
+ 		$.ajax({
+ 			type        : "POST",
+ 			url :  rpath+"/pic/detailPicList.do",
+ 			timeout 	: "6000000", //60분
+ 			data : {path : str },
+ 			success : function(data){
+ 				gData = "";
+ 				clickCnt = 1 
+ 				if(!$('#portfolioModal1').is(':visible') || str != $('#portfolioModal1 .modal-body').find('h2').text()) {
+ 					alertPop("Gallery "+str+"의 동가화가 완료되었습니다.");
+ 					return;
+ 				};		
+ 				$('#picList').empty(); 	
+ 				$('#picList').hide();
+ 				var hrefChk = ""; 
+ 				
+ 				var setDat = "";
+ 				if(cnt == ""){ 					
+ 					setDat =  data.dir;
+ 				}else{
+ 					$('#nextView2').show();
+ 					setDat = (data.dir).slice(0,cnt);
+ 					gData =  (data.dir).slice(cnt);
+ 					if($(gData).size() ==0 ){
+ 						$('#nextView2').hide();
+ 					}
+ 					
+ 				}
+ 				setDetailImageData(setDat);
+ 				
+ 				$('#picList').fadeIn(500);
+			},
+ 			error : function(request, status, error){
+ 				alertPop("오류가 발생하였습니다.");
+ 				$('#picInfoClose').trigger('click');
+ 				
+ 			}
+ 		});
+ 		
+ 		
+ 	 }
+ 	var isClick = 0;	
+	var timer;
+	var hrefChk = "";
+ 	function setDetailImageData(data){
+		var btnClass = ["default", "primary", "success" , "info" ,  "danger"];
+		var btnCnt = 0
+		cntHideId=0;
+	
+ 		$.each(data, function(n,dat){
+ 				
+				var s = (dat.thisPath).split("/");
+				if(s.length>7){ 						
+					if(hrefChk != s[6] ){
+						hrefChk = s[6]; 							
+						$('#picBtn').append('<a  style="margin:5px" class=btn-'+btnClass[btnCnt]+' href=#'+s[6]+'><button type="button"  style="margin-bottom:5px;margin-top:5px" class="btn btn-sm btn-'+btnClass[btnCnt]+'">'+hrefChk+'</button></a>'); 							
+						if(btnCnt >=4){ 								
+							btnCnt = 0 								
+						}else{ 								
+							btnCnt++;
+						}
+						
+						$('#picList').append('<br/><h1><p id='+s[6]+' class="label label-warning">'+s[6]+'</p></h1><br/>');
+					}
+				}
+				
+				if((dat.thisPath).indexOf(".mp4")>-1){			
+					cntHideId = cntHideId + 1;
+					var v = (dat.thisOrgPath).replace(".jpg","");
+					var src = rpath+"/pic/video.do?name="+encodeURI(v)+"&t="+Math.random();   
+					var html = '';
+						html += '<video controls width=592 height=auto preload=none  class="img-responsive img-centered videoMargin" poster='+rpath+dat.thisPath+' >';
+						html += ' 	 <source src='+src+'/>';  
+						html += '</video>';
+						html += '';						
+						$('#picList').append($(html));
+
+						
+				}else{
+					
+					var img = $('<img class="img-responsive img-centered" src="'+rpath+dat.thisPath+"?"+Math.random()+'" alt="" >');
+					var v = dat.thisOrgPath;
+					if(userSet.SET5 == '1'){					
+						$(img).on('mousedown touchstart', function (event) {
+							if(event.type == "mousedown"&&event.button ==2){
+								downPopView(this,event, dat);								
+							}else{ //모바일 터치 일때 0.8초 클릭시 다운
+								    isClick = 1;
+								    var _this = this;
+								    timer = setTimeout(function() {
+								        if (isClick != 0) {
+								            isClick = 0;
+								            downPopView(_this, event, dat);
+								        }
+								    }, 800);
+							}
+					
+						}).on('mouseup touchend touchcancel touchmove', function(event) {
+						    clearTimeout(timer);
+						    isClick = 0;
+						});
+					}	
+					$('#picList').append(img);
+				}
+				
+			});
+ 	}
+ 	
+	function selectAngularPicDir(){
+ 		var cnt = userSet.SET3;
+		var dirApp = angular.module("myApp", ['ngAnimate'])
+		var synk = false;
+		dirApp.controller('dirCtrl', function($scope, $http) {
+		
+			if(cnt != 'all') $('#nextView1').show();
+			else $('#nextView1').hide();
+		
+
+			var gData = "";
+			$scope.addRow = function(){
+				var dat = gData.slice(0,cnt)
+				$scope.data.push.apply($scope.data, dat);
+				gData = gData.slice(cnt);
+				if($(gData).size() == 0 ) $('#nextView1').hide();  				
+			}
+			
+			$('#syncPhoto').click(function(){
+				var bar = new loadingBar("picTxt");
+				bar.start();
+				$http({
+	    	    	method: 'POST',
+	    	        url : rpath+"/pic/syncPicDir.do"
+	    	    }).then(function mySucces(response) {
+	    	    	bar.end();
+	    	    	getData();	    	    	
+	    	    }, function myError(response) {
+	    	    	bar.end();
+	    	    });
+	 		});			
+			var getData = function(){					
+				var bar = new loadingBar("picTxt");
+				bar.start();					
+				$http({
+	    	    	method: 'POST',
+	    	        url : rpath+"/pic/picDirList.do"
+	    	    }).then(function mySucces(response) {
+	    	    	bar.end();	    	    	
+	    	    		    	    		
+	    	    		$(response.data.dir).each(function(n,data){
+	    	    			if(userSet.SET2=='2'){
+	    	    				data.THIS_PATH = "1";
+	    	    			}
+	    	    			data.RANDOM  = (new Date()).toString();
+	    	    		});	    	    		
+	    	    	
+	    	    	
+	    	    	if(cnt != 'all'){
+	    	    		$('#nextView1').show()
+	    	    		gData = "";
+	    	    		dat = response.data.dir.slice(0, cnt);
+	    	    		gData = response.data.dir.slice(cnt);
+	    	    		if($(gData).size()==0 ){
+	    	    			$('#nextView1').hide();	
+	    	    		}
+	    	    			
+	    	    	}else{
+	    	    		dat = response.data.dir;
+	    	    		
+	    	    	}	    
+
+	    	    	$scope.data =dat
+	    	         
+	    	    }, function myError(response) {	    	    	
+	    	    	bar.end();
+	    	    	//오류발생
+	    	    });
+			}
+			getData();
+			
+			
+    	});
+	}
+	selectAngularPicDir();
+	
+	var authInfo =setData.init($('#authRow')); 	 
+	function selSetupInfo(){ 		
+ 		var lv ="${user.AUTH_LEVEL}";
+ 		function setRadio(data){
+			$(data).each(function(n, dat){			
+				$('#setupBody').find('[name='+dat.SET_KEY+']:radio').val([dat.VALUE]);
+			});
+ 		} 		
+ 		
+ 		
+ 		if(lv < 2){
+ 			$('#authSetup').show();
+	 		authInfo.clear();
+	 	 	authInfo.matching = {
+		 	 	 '.auth_dir' 	: ['' , function(dat){		 	 		 
+		 	 		 if(dat.LEVEL <= 1 ){		 	 			 
+		 	 			$(this).text(dat.DIR);	 
+		 	 		 }else{
+		 	 			 var html = "";
+		 	 			 var sp = $("<span>").css("padding-left",dat.LEVEL*15+"px").html("┖   &nbsp;&nbsp;"+dat.DIR);		 	 			
+		 	 			$(this).html(sp);		 	 			
+		 	 		 }
+		 	 	 }],
+		 	 	 '.auth_check' 	: [''	  , 
+		 	 	       function(dat){
+		 	 		 		var html = "";
+		 	 		 		var viewInfos = dat.VIEW_YN.split(",");
+		 	 		 		for(var i = 0 ; i < viewInfos.length ; i++ ){	 	 		 			
+		 	 		 			var viewCheck = viewInfos[i].split("-");
+		 	 		 			var label = viewCheck[1];
+		 	 		 			var value = viewCheck[2] == "Y"? "checked" : "";
+		 	 		 			var o = $("<label auth="+viewCheck[0]+"><input  type = 'checkbox' "+value+" />"+label+"</label>").on("change", function(){
+		 	 		 				var dir = dat.DIR;
+		 	 		 				var auth = $(this).attr('auth');
+		 	 		 				var val = $(this).find(':checkbox').is(':checked') == true? 'Y' : 'N'  ;	 	 		 				
+		 	 		 				$.ajax({
+		 	 		 		 			type        : "POST",
+			 	 		 		 		timeout 	: "6000000", //100분
+		 	 		 		 			data : {DIR: dir , AUTH : auth , VIEW_YN : val },
+		 	 		 		 			url :  rpath+"/pic/updateAuthDir.do", 			
+		 	 		 		 			success : function(data){ 	 				
+		 	 		 		 				authInfo.setData(data.authDir); 				
+		 	 		 					},
+		 	 		 		 			error : function(request, status, error){ 				
+		 	 		 		 			alertPop("오류가 발생하였습니다.");
+		 	 		 		 			}
+		 	 		 		 		});	 	 		 					 	 		 				
+		 	 		 			}); 	 
+		 	 		 			$(this).append(o);
+		 	 		 		}	 	 		 		
+		 	 	 		}] 	 	 
+		 	 	};
+ 		
+ 		}else{ 			
+ 			$('#authSetup').hide();
+ 		}
+ 		$.ajax({
+ 			type        : "POST",
+ 			url :  rpath+"/main/setupInfo.do", 			
+ 			success : function(data){ 	 				
+ 				setRadio(data.setup); 				
+ 				if(lv < 2){
+ 					authInfo.setData(data.authDir);
+ 				}
+ 				
+			},
+ 			error : function(request, status, error){ 				
+ 				alertPop("오류가 발생하였습니다.");
+ 			}
+ 		});
+ 	}
+	
+	function setErrImg(obj){		
+		 if(userSet.SET2 == '2' ){			 
+			 $(obj).hide();	 			 
+		 }else{			 
+			 $(obj).attr("src", rpath+"/images/jo/noImg2.jpg");
+		 }
+		
+	}
+	
+	//다운로드 팝업
+ 	var downPopView = function(obj, ev, dat){
+		var left= $(obj).offset().left; 							     		
+ 		var top= $(obj).offset().top;
+ 	   	var x = ev.pageX;
+        var y = ev.pageY;
+        if(x == undefined){
+        	var et = ev.originalEvent;						            	
+        	x = et.touches[0].screenX;						            	
+        	y = et.touches[0].screenY;
+        }									            
+        if($(document).scrollTop()> top ){
+        	top = $(document).scrollTop();					            	
+        }
+ 		$('#layerpop').css({'top':top, 'left':left}).fadeIn(500); 		
+ 		$('#layerpop').attr({'curX':x, 'curY':y});
+ 		
+ 		$('#layerpop').find('#down1').off('click');	//초기화
+ 		$('#layerpop').find('#down2').off('click'); //초기화
+ 		$('#layerpop').find('#chgPic').off('click');//초기화
+ 		$('#layerpop').find('#down1').on('click', function(){
+ 			var v = dat.thisOrgPath;
+ 			window.location.href = rpath+'/pic/downloadImg.do?name='+encodeURI(v);
+ 		});	
+ 		$('#layerpop').find('#down2').on('click', function(){
+ 			var v = dat.thisPath;
+ 			window.location.href = rpath+'/pic/downloadImg2.do?name='+encodeURI(v);	
+ 		});
+ 		$('#layerpop').find('#chgPic').on('click', function(){ 			
+ 			var name = dat.thisPath;
+ 			var thDir = $('#portfolioModal1 .modal-body').find('h2').text(); //위치
+ 			$.ajax({
+ 	 			type        : "POST",
+ 	 			url :  rpath+"/pic/changeThumbnail.do",
+ 	 			data : {name : name, thDir : thDir},
+ 	 			success : function(data){ 	 				
+ 	 				$('#picRow').find('img').each(function(){
+ 	 					var src = $(this).attr("src").split("?")[0]+"?"+Math.random();
+ 	 					$(this).attr("src",src);
+ 	 					alertPop("변경되었습니다.");
+ 	 				}) ;				
+ 				},
+ 	 			error : function(request, status, error){ 				
+ 	 				alertPop("오류가 발생하였습니다.");
+ 	 			}
+ 	 		});
+ 			
+ 		});
+	} 
+ 	</script>
+
+</body>
+
+</html>

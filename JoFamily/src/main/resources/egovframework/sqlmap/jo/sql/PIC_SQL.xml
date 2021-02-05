@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="pic">
+
+		<update id="insertPicDir" parameterClass="map" >	
+		MERGE INTO 	MYHOME_DIR_AUTH X
+		USING (
+				SELECT 
+					* 					
+				 FROM (		
+						$dirList$ 			 
+					) X CROSS  JOIN MYHOME_AUTH_TYPE Y
+					WHERE 1=1
+					<isGreaterThan property="AUTH_LEVEL" compareValue="2">					
+					AND Y.AUTH =  #AUTH#					 
+					</isGreaterThan>
+					AND Y.USE_YN ='Y'
+			) Y
+		ON (X.FULL_PATH = Y.FULL_PATH AND X.AUTH = Y.AUTH)		
+		WHEN NOT MATCHED THEN
+		INSERT (X.DIR, X.PARENT, X.AUTH, X.FULL_PATH, X.VIEW_YN )
+		VALUES (Y.DIR, Y.PARENT, Y.AUTH, Y.FULL_PATH, (CASE WHEN Y.AUTH_LEVEL &lt;= 1  then  'Y' 
+									 WHEN Y.AUTH_LEVEL = #MK_LVL# THEN 'Y'    	
+									 ELSE 'N' END))   
+	</update>
+	<select id="selectPicDir" parameterClass="map" resultClass="hashmap"  >	
+		SELECT X.*, SUBSTR(THIS_STR,0,20) SUBSTR, SUBSTR(THIS_DATE,0,4)||'.'||SUBSTR(THIS_DATE,5,2)||'.'||SUBSTR(THIS_DATE,7) SUBDATE   FROM (
+		SELECT	
+		DIR,	
+		REPLACE(DIR,' ','_') THIS_PATH,
+		SUBSTR(DIR,0,INSTR(DIR,' ')-1) THIS_DATE,		
+		SUBSTR(DIR,INSTR(DIR,' ')+1) THIS_STR		
+		FROM   MYHOME_DIR_AUTH
+		WHERE AUTH = #AUTH#
+		AND VIEW_YN ='Y'	
+		AND PARENT IS NULL
+		<isNotEmpty  property="searchStr" >
+		AND DIR LIKE '%'||#searchStr#||'%'
+		</isNotEmpty>
+		) X	
+		ORDER BY DIR DESC		
+	</select>
+	<select id="selectAuthDir" parameterClass="map" resultClass="hashmap"  >
+		SELECT PARENT,
+		  DIR ,
+		  VIEW_YN,
+		  LEVEL,
+		  FULL_PATH
+		  ,ATL
+		FROM
+		  (SELECT X.PARENT,
+		    X.DIR ,
+		    LISTAGG( X.AUTH||'-'||COMMT||'-'||X.VIEW_YN, ',') WITHIN GROUP(ORDER BY X.AUTH) VIEW_YN ,
+		    MAX(FULL_PATH) FULL_PATH,
+		    MAX(CASE WHEN #level# = 0 then 'Y' WHEN #level# > 0 AND AUTH_LEVEL = #level# THEN X.VIEW_YN  END ) ATL
+		    FROM MYHOME_DIR_AUTH X ,
+		    MYHOME_AUTH_TYPE Y
+		  WHERE X.AUTH    = Y.AUTH
+		  AND Y.AUTH_LEVEL> 0		  
+		  GROUP BY DIR ,
+		    PARENT
+		  ORDER BY DIR DESC
+		  )
+		  WHERE ATL = 'Y'
+		  <isNotEmpty  property="path" >
+		  AND ( dir=#path# or parent =#path# )
+		  </isNotEmpty>
+		  START WITH PARENT   IS NULL AND ATL = 'Y' 
+		  CONNECT BY PRIOR DIR = PARENT
+		ORDER SIBLINGS BY DIR DESC,
+		  PRIOR DIR ASC 
+	</select>
+	
+	
+	<select id="selectImgDir" parameterClass="map" resultClass="hashmap"  >
+		SELECT PARENT, DIR, FULL_PATH, SRT  FROM 
+			(SELECT X.*, (SELECT TO_CHAR(SORT) FROM MYHOME_DIR_AUTH X WHERE AUTH= #AUTH# AND DIR = #dir# AND ROWNUM =1 ) AS SRT
+			  FROM MYHOME_DIR_AUTH X  WHERE  X.AUTH= #AUTH# AND VIEW_YN = 'Y' 
+			  								 AND PARENT = #dir#
+			  ORDER BY DIR  ) X
+		START WITH PARENT = #dir#
+		CONNECT BY PRIOR DIR = PARENT 
+		ORDER SIBLINGS BY CASE WHEN SRT = 0 THEN DIR ELSE NULL END asc, CASE WHEN SRT = 1 THEN DIR ELSE NULL END DESC, PRIOR DIR ASC 
+	</select>
+	<update id="updateDirSort" parameterClass="map"  >
+		UPDATE MYHOME_DIR_AUTH
+		SET SORT = #srt#
+		WHERE DIR = #dir#
+	</update>
+	
+	<update id="deletePicDir" parameterClass="map"  >		
+		DELETE MYHOME_DIR_AUTH X
+		WHERE NOT EXISTS (	
+			SELECT 1 FROM (
+					SELECT 
+					* 					
+				 FROM (		
+						$dirList$ 			 
+					)
+			)Y WHERE X.DIR = Y.DIR
+		)	
+	</update>
+
+	<update id="updateAuthDir"  parameterClass="map"  >
+		UPDATE MYHOME_DIR_AUTH  SET VIEW_YN = #VIEW_YN# 
+		WHERE DIR = #DIR#
+		 <isNotEmpty property="PARENT">
+		  AND PARENT = #PARENT#
+		  </isNotEmpty>
+		AND AUTH = #AUTH#
+	</update>	
+	<select id="cntAuthDir"  parameterClass="map" resultClass = "Integer">
+		SELECT COUNT(*) FROM MYHOME_DIR_AUTH
+		WHERE FULL_PATH = #FULL_PATH#
+		AND AUTH = #AUTH#
+		AND VIEW_YN = 'Y'
+	</select>	
+	<select id="selectUpPathList"  parameterClass="map" resultClass = "hashmap">
+		SELECT X.*, LEVEL FROM 
+		(SELECT * FROM MYHOME_DIR_AUTH X WHERE  X.AUTH=#AUTH# AND VIEW_YN = 'Y' ORDER BY DIR DESC ) X
+		START WITH PARENT IS NULL
+		CONNECT BY PRIOR DIR = PARENT 
+		ORDER SIBLINGS BY DIR DESC
+	</select>
+		
+</sqlMap>

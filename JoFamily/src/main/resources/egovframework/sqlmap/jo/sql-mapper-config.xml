@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+	<typeHandler  callback="org.springframework.orm.ibatis.support.ClobStringTypeHandler"
+	jdbcType="CLOB" javaType="java.lang.String" />
+	<typeHandler 	callback="org.springframework.orm.ibatis.support.BlobByteArrayTypeHandler"
+	jdbcType="BLOB" javaType="[B" />
+    <typeAliases>
+		<typeAlias alias="egovMap" type="egovframework.rte.psl.dataaccess.util.EgovMap"/>
+    </typeAliases>
+</configuration>

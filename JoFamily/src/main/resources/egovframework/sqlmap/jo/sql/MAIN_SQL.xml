@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE sqlMap PUBLIC "-//iBATIS.com//DTD SQL Map 2.0//EN" "http://www.ibatis.com/dtd/sql-map-2.dtd">
+
+<sqlMap namespace="main">
+	<select id="loginChk"  parameterClass="map" resultClass="hashmap"  >
+		SELECT USERNAME, X.AUTH, AUTH_LEVEL, 
+				(SELECT '{'||listagg(set_key||':"'||value||'"',',' ) within group(order by set_key)||'}' 
+				FROM MYHOME_SET  WHERE  USERNAME = #id# ) SETT 			
+		FROM MYHOME_USER x, MYHOME_AUTH_TYPE y
+		
+		 WHERE X.USE_YN = 'Y'
+		   AND X.AUTH = Y.AUTH
+		   AND USERNAME = #id#
+		   AND USERPASS = #pw#
+	</select>
+	<select id="reloadSession"  parameterClass="map" resultClass="hashmap"  >
+		SELECT USERNAME, X.AUTH, AUTH_LEVEL, 
+				(SELECT '{'||listagg(set_key||':"'||value||'"',',' ) within group(order by set_key)||'}' 
+				from myhome_set  WHERE  USERNAME = #id# ) SETT 			
+		FROM MYHOME_USER x, MYHOME_AUTH_TYPE y
+		
+		 WHERE X.USE_YN = 'Y'
+		   AND X.AUTH = Y.AUTH
+		   AND USERNAME = #id#
+	</select>
+	<select id="selectSetupInfo"  parameterClass="map" resultClass="hashmap"  >
+		SELECT SET_KEY, VALUE FROM MYHOME_SET 
+		 WHERE
+		USERNAME = #id#
+	</select>
+	<update id="updateSetupInfo"  parameterClass="map"  >
+		MERGE INTO MYHOME_SET X  
+		USING  DUAL ON  (X.USERNAME = #id# AND X.SET_KEY = #SET_KEY# )  
+		WHEN MATCHED THEN  
+		UPDATE SET VALUE = #VALUE#
+		WHEN NOT MATCHED THEN
+		INSERT 
+		(
+		USERNAME,
+		SET_KEY,
+		VALUE
+		)
+		VALUES
+  		(
+		 #id# , 
+		 #SET_KEY# ,
+		 #VALUE# 
+		) 
+	</update>
+</sqlMap>

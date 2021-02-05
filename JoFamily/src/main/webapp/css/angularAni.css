@@ -1,0 +1,22 @@
+@CHARSET "UTF-8";
+ .portfolio-item.ng-enter 
+  {
+      -webkit-transition: 1s;
+      transition: 1s;
+      opacity:100;
+  }
+  .portfolio-item.ng-enter-active 
+  {
+      opacity:1;
+  }
+
+
+  .portfolio-item.ng-leave 
+  {
+      -webkit-transition: 1s;
+      transition: 1s;
+  }
+  .portfolio-item.ng-leave-active 
+  {
+      opacity:100;
+  }

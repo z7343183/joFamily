@@ -1,0 +1,11 @@
+.loading-indicator {
+	height: 180px;
+	width: 180px;
+	background: url( '../images/jo/loading.gif' );
+	background-repeat: no-repeat;
+	background-position: center center;
+}
+
+.loading-indicator-overlay {
+	background-color: transparent;
+}
