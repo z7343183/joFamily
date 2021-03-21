@@ -19,10 +19,15 @@
 			) Y
 		ON (X.FULL_PATH = Y.FULL_PATH AND X.AUTH = Y.AUTH)		
 		WHEN NOT MATCHED THEN
-		INSERT (X.DIR, X.PARENT, X.AUTH, X.FULL_PATH, X.VIEW_YN )
+		INSERT (X.DIR, X.PARENT, X.AUTH, X.FULL_PATH, X.VIEW_YN, X.CHKDAY )
 		VALUES (Y.DIR, Y.PARENT, Y.AUTH, Y.FULL_PATH, (CASE WHEN Y.AUTH_LEVEL &lt;= 1  then  'Y' 
 									 WHEN Y.AUTH_LEVEL = #MK_LVL# THEN 'Y'    	
-									 ELSE 'N' END))   
+									 ELSE 'N' END)
+									 ,#CHKDAY#
+									 )  
+		WHEN MATCHED THEN
+		UPDATE SET
+		X.CHKDAY = #CHKDAY#
 	</update>
 	<select id="selectPicDir" parameterClass="map" resultClass="hashmap"  >	
 		SELECT X.*, SUBSTR(THIS_STR,0,20) SUBSTR, SUBSTR(THIS_DATE,0,4)||'.'||SUBSTR(THIS_DATE,5,2)||'.'||SUBSTR(THIS_DATE,7) SUBDATE   FROM (
@@ -91,16 +96,9 @@
 	
 	<update id="deletePicDir" parameterClass="map"  >		
 		DELETE MYHOME_DIR_AUTH X
-		WHERE NOT EXISTS (	
-			SELECT 1 FROM (
-					SELECT 
-					* 					
-				 FROM (		
-						$dirList$ 			 
-					)
-			)Y WHERE X.DIR = Y.DIR
-		)	
+		WHERE CHKDAY &lt; #CHKDAY#	
 	</update>
+
 
 	<update id="updateAuthDir"  parameterClass="map"  >
 		UPDATE MYHOME_DIR_AUTH  SET VIEW_YN = #VIEW_YN# 
@@ -117,11 +115,17 @@
 		AND VIEW_YN = 'Y'
 	</select>	
 	<select id="selectUpPathList"  parameterClass="map" resultClass = "hashmap">
-		SELECT X.*, LEVEL FROM 
-		(SELECT * FROM MYHOME_DIR_AUTH X WHERE  X.AUTH=#AUTH# AND VIEW_YN = 'Y' ORDER BY DIR DESC ) X
-		START WITH PARENT IS NULL
-		CONNECT BY PRIOR DIR = PARENT 
-		ORDER SIBLINGS BY DIR DESC
+	
+	SELECT * FROM (
+		select X.*, ROWNUM RN from ( 
+			SELECT X.*, LEVEL FROM 
+			(SELECT * FROM MYHOME_DIR_AUTH X WHERE  X.AUTH=#AUTH# AND VIEW_YN = 'Y' ORDER BY DIR DESC ) X
+			START WITH PARENT IS NULL
+			CONNECT BY PRIOR DIR = PARENT 
+			ORDER SIBLINGS BY DIR DESC
+		)X
+	)
+	WHERE RN BETWEEN #ST# AND #ED#		
 	</select>
 		
 </sqlMap>

@@ -447,7 +447,13 @@ public class PicServiceImpl extends EgovAbstractServiceImpl implements PicServic
 	@Override
 	public List detailPicList(Map map, HttpServletRequest req) throws Exception {
 		String dirName =(String)map.get("path");
-		String path = getSuperPath()+"/"+(String)map.get("path");			
+		String path = "";
+		
+		if(map.get("path") != null){
+			path = getSuperPath()+"/"+(String)map.get("path");
+		}else{
+			path = getSuperPath()+"/";
+		}
 		List list = new ArrayList();
 		list =  getDirList(list, path, dirName, req);
 		return list;	

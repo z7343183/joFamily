@@ -19,7 +19,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.net.InetAddress;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
@@ -179,26 +181,38 @@ public class PicController {
 	
 		HttpSession session = req.getSession();
 		List<Map> list = picService.selectPicList(dataVO, req);		
-		String str = "";		
-		for(int i = 0 ; i < list.size() ; i++){
-		if(!str.equals("")) str = str+" UNION ALL ";
-			str = str+ "SELECT '"+list.get(i).get("superPath") +"' PARENT,"
-				   	 +" '"+list.get(i).get("thisPath")+"' DIR, "
-				   	 +" '"+list.get(i).get("fullPath")+"' FULL_PATH "
-				   	 + "FROM DUAL";
-		}
-		Map map = new HashMap<String, String>();
 		ModelAndView model = new ModelAndView("jsonView");
+		String chkday =getYMDHMS();
 		String auth = ((Map<?, ?>)session.getAttribute("loginInfo")).get("AUTH")+"";
 		int level = Integer.parseInt(((Map<?, ?>)session.getAttribute("loginInfo")).get("AUTH_LEVEL").toString());
-		map.put("dirList", str);
-		map.put("AUTH", auth);
-		map.put("AUTH_LEVEL", level);		
-		picService.insertDir(map);
-		if(level <= 1){			
-			picService.deleteDir(map);			
+
+		if(list != null){
+		
+			String str = "";				
+			for(int i = 0 ; i < list.size() ; i++){
+			if(!str.equals("")) str = str+" UNION ALL ";
+				str = str+ "SELECT '"+list.get(i).get("superPath") +"' PARENT,"
+					   	 +" '"+list.get(i).get("thisPath")+"' DIR, "
+					   	 +" '"+list.get(i).get("fullPath")+"' FULL_PATH "
+					   	 + "FROM DUAL";
+				
+				
+				if(i%20 == 0 ||i==list.size()-1 ){
+					Map map = new HashMap<String, String>();
+					map.put("AUTH", auth);
+					map.put("AUTH_LEVEL", level);	
+					map.put("CHKDAY",chkday);
+					map.put("dirList", str);
+					picService.insertDir(map);
+					
+					if(i==list.size()-1 && level <= 1){			
+						picService.deleteDir(map);			
+					}
+					str = "";
+				}
+			}
+			model.addObject("result", "S");
 		}
-		model.addObject("result", "S");
 		return model;
 	}
 	
@@ -250,7 +264,8 @@ public class PicController {
 		map.put("dirList", str);
 		map.put("AUTH", auth);
 		map.put("AUTH_LEVEL", level);		
-		map.put("MK_LVL", level);
+		map.put("MK_LVL", level);		
+		map.put("CHKDAY", getYMDHMS());
 		picService.insertDir(map);
 		ModelAndView model = new ModelAndView("jsonView");
 		model.addObject("result", "S");
@@ -309,10 +324,23 @@ public class PicController {
 		int level = Integer.parseInt(((Map<?, ?>)session.getAttribute("loginInfo")).get("AUTH_LEVEL").toString());
 		Map map = new HashMap();
 		String path = (String)dataVO.get("path");		
+		int s = Integer.parseInt((String)dataVO.get("ST"));
 		map.put("AUTH", auth);
+		int row = 50;
+		int st = (s-1)*row+1;
+		int ed = st+row;
+		map.put("ST", st);
+		map.put("ED", ed);
 		List list = picService.selectUpPathList(map);
+		String next = "false";
+		if(list != null && list.size() > row ){
+			list.remove(row);
+			next = "true";
+		}
 		ModelAndView mv = new ModelAndView("jsonView");
-		return mv.addObject("upList", list);
+		mv.addObject("upList", list);
+		mv.addObject("next", next);
+		return mv;
 	}
 	
 	@RequestMapping(value = "/pic/rotImg.do")
@@ -324,5 +352,10 @@ public class PicController {
 		model.addObject("result", "S");
 		return model;
 	}
-	
+	public String getYMDHMS(){
+		SimpleDateFormat f = new SimpleDateFormat("yyyyMMddHHmmss");
+		Date dt = new Date();
+		String fd = f.format(dt);
+		return fd;
+	}
 }

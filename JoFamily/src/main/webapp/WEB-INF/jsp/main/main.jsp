@@ -436,8 +436,8 @@
                             
                             	<div class = "setupBox" >                                  
                                    	<div >경로 선택</div>
-                                   	 <div class="setupContent scroll">
-                                   		 <div style="height:400px;overflow-x:auto;">
+                                   	 <div class="setupContent scroll" >
+                                   		 <div style="height:400px;overflow-x:auto;" id="upDiv" data-nextRow = "1">
 								          <table class="table table-striped">
 								          	<thead>
 								          	  <tr >
@@ -599,6 +599,23 @@
  			selUploadInfo(); 			 		
  			btnInit(); 			
  		})
+ 		
+ 		
+ 		$('#upDiv').scroll(function(){
+ 			var scrollTop = $(this).scrollTop();
+ 			var innerHeight = $(this).innerHeight();
+ 			var scrollHeight = $(this).prop('scrollHeight');
+ 			
+ 			if(scrollTop+innerHeight>=scrollHeight ){
+ 				selUploadInfo();
+ 			}
+ 			
+ 			
+ 		});
+ 		
+ 		
+ 		
+ 		
  		
  		//1초 누르면 팝업 관련
  		$('#portfolioModal1').on('click focus touchmove tourchstart', function(e){
@@ -1266,50 +1283,70 @@
 	
 	var uploadPath =setData.init($('#uploadPathRow')); 	 
 	//=========================upload경로 가져오기==================//
-	function selUploadInfo(){				
-		uploadPath.clear();
+	
+	(function() {
 		uploadPath.matching = {
-	 	 	 '.upload_dir' 	: ['' , function(dat){		 	 		 		 	 		 
-						 	 			 var html = "";
-						 	 			 var a = "";	
-						 	 			 var v = "";
-						 	 			 var addBtnName = "+폴더추가";
-						 	 			 if(dat.LEVEL > 1){
-						 	 				 a = "┖&nbsp;&nbsp;";
-						 	 			 } 
-						 	 			 v = a+dat.DIR;						 	 				 
-						 	 				if(mobile=='mobile'){
-						 	 				addBtnName = "+";						 	 				
-						 	 			 }
-						 	 			 
-						 	 			 var lv =(dat.LEVEL-1)*5;
-						 	 			 var btn = $('<button type="button"  style="margin-left:5px" class="addPathBtn btn btn-sm btn-default">'+addBtnName+'</button>');
-						 	 			 if(dat.LEVEL > 1){
-						 	 				$(btn).hide();						 	 				
-						 	 			 }
-						 	 			 
-						 	 			 $(this).parent('tr').find('td').eq(0).html(btn);
-						 	 			 						 	 			 						 	 			
-						 	 			 var sp = $("<a>").css({"padding-left":lv+"px", "color":"#333", "cursor":"pointer"}).attr("FULL_PATH", dat.FULL_PATH).html(v).on("click", function(){				
-						 	 				 alertPop("경로가 선택되었습니다.");
-						 	 				 $('#filePath').val(dat.FULL_PATH);
-						 				});						 	 									 	 		
-						 	 			$(this).html(sp);						 	 									 	 			
-						 	 			$(btn).on("click", function(e){						 	 				
-						 	 				var idx = $('.addPathBtn').index(this);
-						 	 				var FULL_PATH = $(this).parents('tr').find('a').attr("FULL_PATH");
-						 	 				var dt = [{DIR : "" , LEVEL : dat.LEVEL+1, FULL_PATH :FULL_PATH }];
-						 	 				uploadPath.setData(dt , idx+1);
-						 	 				plusPath(idx, dat.LEVEL+1, FULL_PATH);
-						 	 			})
-						 	 			
-							 	 	 }]				 	 	 
- 	 	}
+		 	 	 '.upload_dir' 	: ['' , function(dat){		 	 		 		 	 		 
+							 	 			 var html = "";
+							 	 			 var a = "";	
+							 	 			 var v = "";
+							 	 			 var addBtnName = "+폴더추가";
+							 	 			 if(dat.LEVEL > 1){
+							 	 				 a = "┖&nbsp;&nbsp;";
+							 	 			 } 
+							 	 			 v = a+dat.DIR;						 	 				 
+							 	 				if(mobile=='mobile'){
+							 	 				addBtnName = "+";						 	 				
+							 	 			 }
+							 	 			 
+							 	 			 var lv =(dat.LEVEL-1)*5;
+							 	 			 var btn = $('<button type="button"  style="margin-left:5px" class="addPathBtn btn btn-sm btn-default">'+addBtnName+'</button>');
+							 	 			 if(dat.LEVEL > 1){
+							 	 				$(btn).hide();						 	 				
+							 	 			 }
+							 	 			 
+							 	 			 $(this).parent('tr').find('td').eq(0).html(btn);
+							 	 			 						 	 			 						 	 			
+							 	 			 var sp = $("<a>").css({"padding-left":lv+"px", "color":"#333", "cursor":"pointer"}).attr("FULL_PATH", dat.FULL_PATH).html(v).on("click", function(){				
+							 	 				 alertPop("경로가 선택되었습니다.");
+							 	 				 $('#filePath').val(dat.FULL_PATH);
+							 				});						 	 									 	 		
+							 	 			$(this).html(sp);						 	 									 	 			
+							 	 			$(btn).on("click", function(e){						 	 				
+							 	 				var idx = $('.addPathBtn').index(this);
+							 	 				var FULL_PATH = $(this).parents('tr').find('a').attr("FULL_PATH");
+							 	 				var dt = [{DIR : "" , LEVEL : dat.LEVEL+1, FULL_PATH :FULL_PATH }];
+							 	 				uploadPath.setData(dt , idx+1);
+							 	 				plusPath(idx, dat.LEVEL+1, FULL_PATH);
+							 	 			})
+							 	 			
+								 	 	 }]				 	 	 
+	 	 	}
+		
+	}());
+	
+	
+	
+	function selUploadInfo(){				
+		//uploadPath.clear();
+		
+		var next = $('#upDiv').attr('data-nextRow');
+		if(next == '' ||next == undefined  ){
+			return;
+		}
 		$.ajax({
  			type        : "POST",
- 			url :  rpath+"/pic/selectUpPathList.do", 			
- 			success : function(data){ 	 				 				
- 				uploadPath.setData(data.upList);
+ 			url :  rpath+"/pic/selectUpPathList.do",
+ 			data : {ST : next},
+ 			success : function(data){
+	 			uploadPath.setData(data.upList);
+ 				if(data.next == 'false'){
+ 					$('#upDiv').prop('data-nextRow', "");
+ 				}else{
+	 				$('#upDiv').prop('data-nextRow', next+1);
+ 				}
+ 				
+ 				
 			},
  			error : function(request, status, error){ 				
  				alertPop("오류가 발생하였습니다.");
