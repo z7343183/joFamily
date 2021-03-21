@@ -601,12 +601,12 @@
  		})
  		
  		
- 		$('#upDiv').scroll(function(){
+ 		$('#upDiv').on('scroll scrollstop',function(){
  			var scrollTop = $(this).scrollTop();
  			var innerHeight = $(this).innerHeight();
  			var scrollHeight = $(this).prop('scrollHeight');
  			
- 			if(scrollTop+innerHeight>=scrollHeight ){
+ 			if(scrollTop+innerHeight>=scrollHeight-10 ){
  				selUploadInfo();
  			}
  			
@@ -828,6 +828,8 @@
 	 	}
  	
 	 	$('#uploadBtnClose_s').click(function(){
+	 		
+	 		
 	 		$('#dirPathPop').fadeOut(500);
 	 	});
 	 	$('#sAuthPopBtnClose_s').click(function(){	 		
