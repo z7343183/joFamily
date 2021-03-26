@@ -296,7 +296,7 @@
 				       		 	 <div class="form-group">
 									<div class="col-10" style="z-index:7601">
 											<p id="parPath" style="padding: 10px"></p>					
-											<input class="form-control" type="text" value="" id="filePath_s" name = "filePath_s" >
+											<input class="form-control" type="text" value="" id="filePath_s"  placeholder="하위폴더"  name = "filePath_s" >
 									</div>  										 	  
 					               	</br>	   
 					               	<div align="center">
@@ -416,7 +416,7 @@
                                    	 <form id="fileForm" enctype="multipart/form-data">
 	                                   <div class="form-group ">
   										<div class="col-10">  										
-    										<input class="form-control" type="text" value="" id="filePath" name = "filePath" readonly="readonly" style="background-color:transparent;">    										    									
+    										<input class="form-control" type="text" value="" id="filePath"  placeholder="아래에서 업로드할 경로를 선택해 주세요."  name = "filePath" readonly="readonly" style="background-color:transparent;">    										    									
   										</div>  										 	  
 										<div style="display: none"> 	                                   	                                   		                                   
 	                                   	<input id="uploadFile" type="file" style="width: 500px" multiple="multiple" name="filename[]"/>사진올리기 	                                   
@@ -661,15 +661,9 @@
 		
 		//파일첨부관련
 		$('#filePath').on('focus blur change', function(e){
-			var fileStr = "경로를 선택해 주세요."
 			if(e.type == 'focus'){
 				this.value = "";				
-			}else if(e.type == 'blur'){
-				if(this.value == ""){						
-					this.value = fileStr; 
-				}				
 			}
-			
 		});
 		
 		$('#filePath').trigger("blur");
@@ -698,7 +692,8 @@
  		});
 
  		$('#upLoadBtn').on('click', function(){
-	 		$('#uploadFile').trigger("click");
+ 			if(nullFilePathCheck()){return;}
+ 			$('#uploadFile').trigger("click");
 	 		
 	 	});
 	 	$('#setupReload').on('click', function(){
@@ -729,8 +724,20 @@
  			$('#upLoadBtn').fadeOut('500').addClass("btn btn-warning").fadeIn(500);	 			
  			$('#upLoadBtn').off('click');
  			$('#upLoadBtn').on('click', function(){
+ 				if(nullFilePathCheck()){return;}
  				$('#uploadFile').trigger("click");		 				
  			});
+	 		
+	 	}
+	 	
+	 	
+	 	function nullFilePathCheck(){
+	 		var alertMsg = "경로를 선택해 주세요.";
+	 		if($.trim($('#filePath').val())==""){ 				 			
+	 			alertPop(alertMsg);
+	 			return false;
+	 		}
+	 		return true;
 	 		
 	 	}
 	 	
@@ -760,13 +767,8 @@
 	 	
 	 	uploadFileChange();	 	         
 	 	
-	 	function uploadFile(){	 		
-	 		var alertMsg = "경로를 선택해 주세요.";
-	 		if($.trim($('#filePath').val())==""||$('#filePath').val()== alertMsg){ 				 			
-	 			alertPop(alertMsg);
-	 			return;
-	 		}
-	 		
+	 	function uploadFile(){	
+	 		if(nullFilePathCheck()){return;}
 	 		var formData = new FormData(); 
 			var files = $("#uploadFile").get(0).files; 
 			if (files.length == 0){
@@ -828,8 +830,8 @@
 	 	}
  	
 	 	$('#uploadBtnClose_s').click(function(){
-	 		
-	 		
+	 		$('#upLoadBtn_s').off("click");
+	 		$('#filePath').val("");
 	 		$('#dirPathPop').fadeOut(500);
 	 	});
 	 	$('#sAuthPopBtnClose_s').click(function(){	 		
@@ -1330,12 +1332,14 @@
 	
 	
 	function selUploadInfo(){				
-		//uploadPath.clear();
 		
 		var next = $('#upDiv').attr('data-nextRow');
 		if(next == '' ||next == undefined  ){
 			return;
 		}
+		//여기
+		
+		
 		$.ajax({
  			type        : "POST",
  			url :  rpath+"/pic/selectUpPathList.do",
@@ -1500,11 +1504,6 @@
 	 		}); 	 		
 			
  		
- 		var nullTxt = "하위폴더 입력"; 		
-		$('#filePath_s').on("focus", function(){ 					
-			if($('#filePath_s').val()==nullTxt)
-			$('#filePath_s').val(""); 					
-		});
  		
  		
  		$('#layerpop').find('#uploadThisDir').on('click', function(){ 			
@@ -1520,7 +1519,7 @@
  			if(vstr.length == 2){
  				
  				$('#parPath').text(vstr[0]+" /");
- 				$('#filePath_s').val(nullTxt); 				
+ 				 				
  				
  			}else if(vstr.length >2){
  				$('#filePath_s').off("focus");	
@@ -1542,9 +1541,6 @@
 			$('#upLoadBtn_s').on("click",function(){
 				var v1 = vstr[0];
 				var v2 = $('#filePath_s').val();
-				if(v2 == nullTxt){
-					v2 = "";
-				}
 				$('#filePath').val(v1+"/"+v2);
 				$('#uploadFile').trigger("click");
 				$('#uploadBtnClose_s').trigger("click");
