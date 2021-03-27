@@ -596,8 +596,8 @@
 	
  		//파일첨부 관련
  		$('#upDirReset').click(function(e){
- 			selUploadInfo(); 			 		
  			btnInit(); 			
+ 			selUploadInfo(); 			 		
  		})
  		
  		
