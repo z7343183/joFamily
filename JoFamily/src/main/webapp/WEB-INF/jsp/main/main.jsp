@@ -1290,6 +1290,8 @@
 	var uploadPath =setData.init($('#uploadPathRow')); 	 
 	//=========================upload경로 가져오기==================//
 	
+	uploadPath.clear();
+	
 	(function() {
 		uploadPath.matching = {
 		 	 	 '.upload_dir' 	: ['' , function(dat){		 	 		 		 	 		 
